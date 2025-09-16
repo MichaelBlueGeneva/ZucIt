@@ -1,8 +1,8 @@
 Utilise le mode Think pour résoudre ces soucis
 
-- Quand j'appuis sur Zucman GO, il me dit que la valeur pour la valorisation d'apple n'est pas ok : 3000
-Il dit Veuillez saisir une valeur vaide et propose 2999,901 ou 3000,001
-- Recettes État perdues -2193416.7 M€ : Tu es sur du montant ?
-- Propose moi 5 methodes pour estimer l'impact sur l'emploi que tu mettra dans un fichier ImpactEmploi.md
-- Propose moi 5 methodes pour estimer l'impact sur le benefice que tu mettra dans un fichier ImpactBenefice.md
-- Propose moi 5 methodes pour estimer quand l'entreprise ferai faillite  que tu mettra dans un fichier ImpactFaillite.md
+- Implemente pour le benefices la methode "5. Méthode Modèle Économique Complet" de ImpactBenefice.md. Mettre les parametres necessaires dans config.py.
+- Tu ajoutera donc un KPI : Augementation des prix du a la taxe Zucman
+- Bien sur, tu expliquera le raisonnement dans la page d'explication
+- Implemente pour l'emploi la methode "5. Méthode Mixte Productivité-Demande"
+- Bien sur, tu expliquera le raisonnement dans la page d'explication
+- Pour ImpactFaillite.md, creuse les methodes en fonciton des données disponibles publiquement. Est ce qu'on a la tresorerie ou l'EBITDA par exemple ?
