@@ -1,7 +1,9 @@
 Utilise le mode Think pour résoudre ces soucis
 
-- Pour ImpactFaillite.md, tu as creuse les methodes en fonciton des données disponibles publiquement
-Maintenant, propose moi la meilleure methode et va chercher les data necessaires pour les entreprises de tests (et ajouter sur l'UI pour personnaliser)
-- Recettes État supplémentaires : Le nombre tiens sur 2 lignes. Affiche en millions ou en milliard suivant le chiffre
-- Ajoute un KPI : Encore présent aprés 20 ans ou Faillite en XXXX provoquée par la taxe Zucman. Vert ou rouge donc
-- Sur l'exemple d'Apple, tu as un pic d'emploi suivit d'une chute avec Zucman en 2043. Et a partir de 2036, les emplois augmewnent avec la taxe zucman. Explique moi dans un fichier ExploicationUmploi.md
+- Controle que les explications sont bien a jour avec le code et les commits
+- Modifie la rubrique "Aller Plus Loin" pour pointer sur https://institutdeslibertes.org et https://mises.org. 
+Precise qu'il n'y a aucun lien avec le site
+- Pourquoi les emplois n'evoluent pas dans le scenario Sans Zucman ?
+- Modifie les entreprises pour mettre des entreprises francaises
+- Je suis etonné que les recettes de l'etat augmentent sur les 20 ans car il va y avoir un impact sur le benefice donc l'IS et aussi sur la valorisation
+- Si tu as modifié les regles, controle que les explications sont bien a jour avec le code et les commits
