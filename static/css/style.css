@@ -318,7 +318,7 @@ header h1 {
 /* Charts */
 .charts-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: 1fr;
     gap: 30px;
     margin-bottom: 40px;
 }
@@ -341,7 +341,8 @@ header h1 {
 }
 
 .chart-wrapper canvas {
-    max-height: 300px;
+    max-height: 400px;
+    width: 100%;
 }
 
 /* Analysis section */

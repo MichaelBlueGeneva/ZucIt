@@ -90,8 +90,19 @@ def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None
         with_zucman["profits"].append(current_profit_with_zuc)
         with_zucman["valuations"].append(current_valuation_with_zuc)
 
-        # Employés proportionnels au profit
-        current_employees_with_zuc = int(current_profit_with_zuc * employee_ratio)
+        # METHODOLOGIES DE CALCUL D'EMPLOI (plusieurs approches possibles):
+        # 1. Proportionnel au profit avec plancher (actuel)
+        # 2. Basé sur la croissance du chiffre d'affaires
+        # 3. Modèle économétrique avec élasticité emploi/profit
+        # 4. Impact différé avec inertie RH
+
+        # Méthode 1: Proportionnel au profit avec plancher minimum
+        min_employees = max(1, int(employees * 0.1))  # 10% minimum
+        if current_profit_with_zuc > 0:
+            current_employees_with_zuc = max(min_employees, int(current_profit_with_zuc * employee_ratio))
+        else:
+            current_employees_with_zuc = min_employees
+
         with_zucman["employees"].append(current_employees_with_zuc)
 
         # Recettes état: 25% bénéfices + 2.857% valorisation
@@ -119,13 +130,21 @@ def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None
     final_employees_diff = no_zucman["employees"][-1] - with_zucman["employees"][-1]
     total_zucman_revenue = sum(with_zucman["state_revenue"]) - sum(no_zucman["state_revenue"])
 
+    # Calcul du total de la taxe Zucman collectée sur les valorisations
+    total_zucman_tax_collected = 0
+    current_val_temp = valuation
+    for year in range(years):
+        total_zucman_tax_collected += current_val_temp * app.config['ZUCMAN_TAX_RATE']
+        current_val_temp *= (1 + growth_rate * 0.6)  # Même calcul que dans la simulation
+
     kpis = {
         "profit_loss_percent": (final_profit_diff / no_zucman["profits"][-1]) * 100,
         "profit_loss_amount": final_profit_diff,
         "jobs_lost": final_employees_diff,
         "jobs_lost_percent": (final_employees_diff / no_zucman["employees"][-1]) * 100,
         "additional_tax_revenue": total_zucman_revenue,
-        "tax_efficiency": total_zucman_revenue / final_profit_diff if final_profit_diff > 0 else 0
+        "tax_efficiency": total_zucman_revenue / total_zucman_tax_collected if total_zucman_tax_collected > 0 else 0,
+        "total_zucman_tax_collected": total_zucman_tax_collected
     }
 
     return {

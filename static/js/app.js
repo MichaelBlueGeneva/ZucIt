@@ -72,8 +72,8 @@ class ZucItApp {
 
     populateForm(company) {
         document.getElementById('company-name').value = company.name;
-        document.getElementById('valuation').value = company.valuation;
-        document.getElementById('profit').value = company.profit;
+        document.getElementById('valuation').value = company.valuation / 1000000000; // Convertir en milliards
+        document.getElementById('profit').value = company.profit / 1000000; // Convertir en millions
         document.getElementById('employees').value = company.employees;
         document.getElementById('growth-rate').value = company.growth_rate * 100; // Convertir en pourcentage
     }
@@ -105,8 +105,8 @@ class ZucItApp {
 
     getFormData() {
         return {
-            valuation: parseFloat(document.getElementById('valuation').value),
-            profit: parseFloat(document.getElementById('profit').value),
+            valuation: parseFloat(document.getElementById('valuation').value) * 1000000000, // Convertir milliards en euros
+            profit: parseFloat(document.getElementById('profit').value) * 1000000, // Convertir millions en euros
             employees: parseInt(document.getElementById('employees').value),
             growth_rate: parseFloat(document.getElementById('growth-rate').value)
         };
@@ -152,11 +152,23 @@ class ZucItApp {
         document.getElementById('jobs-lost').textContent =
             `${kpis.jobs_lost.toLocaleString()} emplois`;
 
-        // Recettes supplémentaires de l'État
-        document.getElementById('additional-tax-revenue').textContent =
-            `${this.formatCurrency(kpis.additional_tax_revenue)}`;
+        // Recettes supplémentaires de l'État (avec gestion du signe et coloring)
+        const revenueCard = document.getElementById('revenue-kpi-card');
+        const revenueTitle = document.getElementById('revenue-kpi-title');
+        const revenueAmount = this.formatCurrencyMillions(kpis.additional_tax_revenue);
+
+        if (kpis.additional_tax_revenue >= 0) {
+            revenueTitle.textContent = '🏛️ Recettes État supplémentaires';
+            document.getElementById('additional-tax-revenue').textContent = `+${revenueAmount} M€`;
+            revenueCard.className = 'kpi-card positive';
+        } else {
+            revenueTitle.textContent = '🏛️ Recettes État perdues';
+            document.getElementById('additional-tax-revenue').textContent = `${revenueAmount} M€`; // Le - est déjà inclus
+            revenueCard.className = 'kpi-card negative';
+        }
+
         document.getElementById('tax-efficiency').textContent =
-            `${kpis.tax_efficiency.toFixed(2)}€ collectés / 1€ perdu`;
+            `${kpis.tax_efficiency.toFixed(2)}€ récupérés / 1€ taxé`;
     }
 
     createCharts(results) {
@@ -369,6 +381,10 @@ class ZucItApp {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0
         }).format(amount);
+    }
+
+    formatCurrencyMillions(amount) {
+        return (amount / 1000000).toFixed(1);
     }
 }
 

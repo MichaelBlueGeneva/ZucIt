@@ -43,15 +43,15 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="valuation">Valorisation (€):</label>
-                            <input type="number" id="valuation" value="1000000000" step="1000000" required>
-                            <small>Valorisation totale de l'entreprise</small>
+                            <label for="valuation">Valorisation (Md€):</label>
+                            <input type="number" id="valuation" value="1" step="0.1" min="0.001" required>
+                            <small>Valorisation totale en milliards d'euros</small>
                         </div>
 
                         <div class="form-group">
-                            <label for="profit">Bénéfice annuel (€):</label>
-                            <input type="number" id="profit" value="50000000" step="100000" required>
-                            <small>Bénéfice net annuel</small>
+                            <label for="profit">Bénéfice annuel (M€):</label>
+                            <input type="number" id="profit" value="50" step="1" min="0" required>
+                            <small>Bénéfice net annuel en millions d'euros</small>
                         </div>
                     </div>
 
@@ -102,8 +102,8 @@
                         <div class="kpi-amount" id="jobs-lost">-</div>
                     </div>
 
-                    <div class="kpi-card positive">
-                        <h3>🏛️ Recettes État supplémentaires</h3>
+                    <div class="kpi-card" id="revenue-kpi-card">
+                        <h3 id="revenue-kpi-title">🏛️ Recettes État supplémentaires</h3>
                         <div class="kpi-value" id="additional-tax-revenue">-</div>
                         <div class="kpi-efficiency">Efficacité: <span id="tax-efficiency">-</span></div>
                     </div>
