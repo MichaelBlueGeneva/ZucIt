@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZucIt - Simulation Taxe Zucman</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏢 ZucIt - Simulateur Taxe Zucman</h1>
+            <p class="subtitle">Découvrez l'impact de la taxe Zucman sur votre entreprise sur 20 ans</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Section de configuration -->
+            <div class="config-section">
+                <h2>📊 Configuration de l'entreprise</h2>
+
+                <!-- Sélection d'entreprise exemple -->
+                <div class="example-companies">
+                    <h3>Entreprises exemples :</h3>
+                    <div class="company-buttons">
+                        {% for key, company in companies.items() %}
+                        <button class="company-btn" data-company="{{ key }}">
+                            {{ company.name }}
+                        </button>
+                        {% endfor %}
+                        <button class="company-btn custom-btn" data-company="custom">
+                            ➕ Entreprise personnalisée
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Formulaire de paramètres -->
+                <form id="simulation-form" class="parameters-form">
+                    <div class="form-group">
+                        <label for="company-name">Nom de l'entreprise:</label>
+                        <input type="text" id="company-name" value="Mon Entreprise" placeholder="Nom de votre entreprise">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="valuation">Valorisation (€):</label>
+                            <input type="number" id="valuation" value="1000000000" step="1000000" required>
+                            <small>Valorisation totale de l'entreprise</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="profit">Bénéfice annuel (€):</label>
+                            <input type="number" id="profit" value="50000000" step="100000" required>
+                            <small>Bénéfice net annuel</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="employees">Nombre d'employés:</label>
+                            <input type="number" id="employees" value="1000" min="1" required>
+                            <small>Effectif total de l'entreprise</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="growth-rate">Taux de croissance (% annuel):</label>
+                            <input type="number" id="growth-rate" value="8" step="0.1" min="0" max="50" required>
+                            <small>Croissance annuelle attendue</small>
+                        </div>
+                    </div>
+
+                    <div class="zucman-info">
+                        <h4>📋 Paramètres de la taxe Zucman :</h4>
+                        <ul>
+                            <li><strong>Taxe sur la valorisation :</strong> 2.857% (2% + flat tax)</li>
+                            <li><strong>Taxe sur les bénéfices :</strong> 25% (inchangée)</li>
+                            <li><strong>Impact :</strong> Réduction de la croissance et des investissements</li>
+                        </ul>
+                    </div>
+
+                    <button type="submit" class="zucman-btn">
+                        🚀 ZUCMAN GO !
+                    </button>
+                </form>
+            </div>
+
+            <!-- Section des résultats -->
+            <div id="results-section" class="results-section" style="display: none;">
+                <h2>📈 Résultats de la simulation sur 20 ans</h2>
+
+                <!-- KPIs principaux -->
+                <div class="kpis-container">
+                    <div class="kpi-card negative">
+                        <h3>💸 Perte de bénéfices</h3>
+                        <div class="kpi-value" id="profit-loss-percent">-</div>
+                        <div class="kpi-amount" id="profit-loss-amount">-</div>
+                    </div>
+
+                    <div class="kpi-card negative">
+                        <h3>👥 Emplois perdus</h3>
+                        <div class="kpi-value" id="jobs-lost-percent">-</div>
+                        <div class="kpi-amount" id="jobs-lost">-</div>
+                    </div>
+
+                    <div class="kpi-card positive">
+                        <h3>🏛️ Recettes État supplémentaires</h3>
+                        <div class="kpi-value" id="additional-tax-revenue">-</div>
+                        <div class="kpi-efficiency">Efficacité: <span id="tax-efficiency">-</span></div>
+                    </div>
+                </div>
+
+                <!-- Graphiques -->
+                <div class="charts-container">
+                    <div class="chart-wrapper">
+                        <h3>💰 Évolution des bénéfices</h3>
+                        <canvas id="profit-chart"></canvas>
+                    </div>
+
+                    <div class="chart-wrapper">
+                        <h3>👥 Évolution des emplois</h3>
+                        <canvas id="employees-chart"></canvas>
+                    </div>
+
+                    <div class="chart-wrapper">
+                        <h3>🏛️ Recettes fiscales de l'État</h3>
+                        <canvas id="revenue-chart"></canvas>
+                    </div>
+
+                    <div class="chart-wrapper">
+                        <h3>📊 Valorisation de l'entreprise</h3>
+                        <canvas id="valuation-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Analyse détaillée -->
+                <div class="analysis-section">
+                    <h3>🔍 Analyse de l'impact Zucman</h3>
+                    <div id="detailed-analysis" class="analysis-content">
+                        <!-- Contenu généré dynamiquement -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>💡 ZucIt - Visualisation des effets économiques "qui ne se voient pas" (F. Hayek)</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
