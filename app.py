@@ -159,6 +159,10 @@ def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None
 def index():
     return render_template('index.html', companies=EXAMPLE_COMPANIES)
 
+@app.route('/methodology')
+def methodology():
+    return render_template('explanation.html')
+
 @app.route('/simulate', methods=['POST'])
 def simulate():
     data = request.json

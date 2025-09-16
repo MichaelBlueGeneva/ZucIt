@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZucIt - Méthodologie et Calculs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 ZucIt - Méthodologie</h1>
+            <p class="subtitle">Comprendre les calculs et réflexions économiques de la simulation</p>
+            <nav class="header-nav">
+                <a href="/" class="nav-link">← Retour à la simulation</a>
+            </nav>
+        </header>
+
+        <div class="explanation-content">
+            <section class="methodology-section">
+                <h2>🎯 Objectif de ZucIt</h2>
+                <p>ZucIt simule l'impact économique de la taxe Zucman (2.857% sur la valorisation des entreprises) sur une période de 20 ans. L'objectif est de rendre visible <strong>"ce qui ne se voit pas"</strong> selon l'expression de Frédéric Bastiat : les conséquences économiques indirectes et à long terme des politiques fiscales.</p>
+
+                <div class="concept-box">
+                    <h3>💡 Le concept de "ce qui ne se voit pas"</h3>
+                    <p>Quand l'État collecte une taxe, <strong>ce qui se voit</strong> c'est l'argent qui rentre dans les caisses publiques. <strong>Ce qui ne se voit pas</strong>, ce sont les investissements non réalisés, les emplois non créés, l'innovation freinée, et la croissance économique perdue.</p>
+                </div>
+            </section>
+
+            <section class="methodology-section">
+                <h2>🔢 Paramètres de Base</h2>
+
+                <div class="parameters-grid">
+                    <div class="param-card">
+                        <h4>Taxe Zucman</h4>
+                        <p><strong>2.857%</strong> sur la valorisation</p>
+                        <small>2% taxe Zucman + 0.857% flat tax existante</small>
+                    </div>
+
+                    <div class="param-card">
+                        <h4>Taxe sur profits</h4>
+                        <p><strong>25%</strong> des bénéfices</p>
+                        <small>Impôt sur les sociétés (inchangé)</small>
+                    </div>
+
+                    <div class="param-card">
+                        <h4>Période simulation</h4>
+                        <p><strong>20 ans</strong></p>
+                        <small>Horizon d'investissement long terme</small>
+                    </div>
+
+                    <div class="param-card">
+                        <h4>Entreprises types</h4>
+                        <p><strong>4 profils</strong></p>
+                        <small>Apple, Microsoft, Google, Startup</small>
+                    </div>
+                </div>
+            </section>
+
+            <section class="methodology-section">
+                <h2>⚙️ Modèle de Calcul</h2>
+
+                <h3>1. Scénario SANS Zucman (Référence)</h3>
+                <div class="calculation-box">
+                    <h4>Évolution des bénéfices :</h4>
+                    <code>Bénéfice(t) = Bénéfice(t-1) × (1 + taux_croissance)</code>
+
+                    <h4>Évolution de la valorisation :</h4>
+                    <code>Valorisation(t) = Valorisation(t-1) × (1 + taux_croissance × 0.8)</code>
+                    <small>Croissance valorisation = 80% de la croissance profits</small>
+
+                    <h4>Emplois :</h4>
+                    <code>Employés(t) = Bénéfice(t) × ratio_emploi_profit_initial</code>
+
+                    <h4>Recettes État :</h4>
+                    <code>Recettes(t) = Bénéfice(t) × 25%</code>
+                </div>
+
+                <h3>2. Scénario AVEC Zucman</h3>
+                <div class="calculation-box">
+                    <h4>Taxe annuelle Zucman :</h4>
+                    <code>Taxe_Zucman(t) = Valorisation(t) × 2.857%</code>
+
+                    <h4>Impact sur la croissance des bénéfices :</h4>
+                    <code>Bénéfice(t) = Bénéfice(t-1) × (1 + taux_croissance) × (1 - 0.15)</code>
+                    <small>Réduction de 15% de la croissance due à moins d'investissements</small>
+
+                    <h4>Impact sur la valorisation :</h4>
+                    <code>Valorisation(t) = Valorisation(t-1) × (1 + taux_croissance × 0.6)</code>
+                    <small>Croissance réduite à 60% au lieu de 80%</small>
+
+                    <h4>Emplois avec plancher :</h4>
+                    <code>Employés(t) = max(10% × Employés_initiaux, Bénéfice(t) × ratio_emploi)</code>
+                    <small>Minimum 10% des effectifs initiaux conservés</small>
+
+                    <h4>Recettes État totales :</h4>
+                    <code>Recettes(t) = Bénéfice(t) × 25% + Taxe_Zucman(t)</code>
+                </div>
+            </section>
+
+            <section class="methodology-section">
+                <h2>🧮 Calcul des KPIs</h2>
+
+                <h3>Perte de Bénéfices</h3>
+                <div class="kpi-explanation">
+                    <code>Perte_Bénéfices = Bénéfice_sans_Zucman(20) - Bénéfice_avec_Zucman(20)</code>
+                    <p>Mesure la différence de profit final après 20 ans entre les deux scénarios.</p>
+                </div>
+
+                <h3>Emplois Perdus</h3>
+                <div class="kpi-explanation">
+                    <code>Emplois_Perdus = Employés_sans_Zucman(20) - Employés_avec_Zucman(20)</code>
+                    <p>Nombre d'emplois qui auraient été créés sans la taxe Zucman.</p>
+                </div>
+
+                <h3>Recettes État Supplémentaires</h3>
+                <div class="kpi-explanation">
+                    <code>Recettes_Supplémentaires = Σ(Recettes_avec_Zucman) - Σ(Recettes_sans_Zucman)</code>
+                    <p>Argent supplémentaire collecté par l'État sur 20 ans grâce à la taxe Zucman.</p>
+                </div>
+
+                <h3>Efficacité Fiscale</h3>
+                <div class="kpi-explanation">
+                    <code>Efficacité = Recettes_Supplémentaires / Taxe_Zucman_Totale_Collectée</code>
+                    <p>Mesure combien l'État récupère réellement par euro de taxe prélevé, en tenant compte des effets de bord (baisse d'impôt sur les sociétés due à la baisse des profits).</p>
+                </div>
+            </section>
+
+            <section class="methodology-section">
+                <h2>🎭 Réflexions Économiques</h2>
+
+                <h3>1. L'Effet Multiplicateur Négatif</h3>
+                <div class="economic-concept">
+                    <p>La taxe Zucman ne se contente pas de prélever de l'argent, elle <strong>détruit de la richesse</strong> :</p>
+                    <ul>
+                        <li>Moins de liquidités → Moins d'investissement R&D</li>
+                        <li>Moins d'innovation → Perte de compétitivité</li>
+                        <li>Croissance ralentie → Moins d'emplois créés</li>
+                        <li>Moins de profits → Moins d'impôt sur les sociétés pour l'État</li>
+                    </ul>
+                </div>
+
+                <h3>2. L'Horizon Temporel</h3>
+                <div class="economic-concept">
+                    <p>Les effets négatifs s'accumulent sur 20 ans :</p>
+                    <ul>
+                        <li><strong>Année 1</strong> : Impact modéré, l'entreprise puise dans ses réserves</li>
+                        <li><strong>Années 2-10</strong> : Réduction progressive des investissements</li>
+                        <li><strong>Années 10-20</strong> : Perte de compétitivité, déclin accéléré</li>
+                    </ul>
+                </div>
+
+                <h3>3. L'Asymétrie des Effets</h3>
+                <div class="economic-concept">
+                    <p>La taxe affecte différemment les entreprises :</p>
+                    <ul>
+                        <li><strong>Grandes entreprises</strong> : Impact relativement supportable mais effets d'échelle importants</li>
+                        <li><strong>Startups</strong> : Impact potentiellement fatal, freine l'innovation</li>
+                        <li><strong>Entreprises en croissance</strong> : Pénalise le succès et l'expansion</li>
+                    </ul>
+                </div>
+
+                <h3>4. Les Limites du Modèle</h3>
+                <div class="limitations-box">
+                    <h4>⚠️ Simplifications assumées :</h4>
+                    <ul>
+                        <li>Impact homogène sur tous les secteurs</li>
+                        <li>Pas de comportements d'optimisation fiscale</li>
+                        <li>Pas d'effets macroéconomiques (récession, inflation)</li>
+                        <li>Emploi strictement lié au profit (simplification)</li>
+                        <li>Pas de délocalisation d'entreprises</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="methodology-section">
+                <h2>📈 Interprétation des Résultats</h2>
+
+                <h3>Lecture des Graphiques</h3>
+                <div class="graph-explanation">
+                    <h4>Courbe des Bénéfices :</h4>
+                    <p>L'écart grandissant entre les deux courbes montre l'effet cumulatif de la taxe sur la création de richesse.</p>
+
+                    <h4>Courbe des Emplois :</h4>
+                    <p>Illustre l'impact social : emplois qui n'existeront pas à cause de la taxe.</p>
+
+                    <h4>Recettes Fiscales :</h4>
+                    <p>Montre le paradoxe : l'État peut collecter moins au total si l'économie se contracte.</p>
+
+                    <h4>Valorisation :</h4>
+                    <p>Reflète la perte de valeur économique totale créée par la taxe.</p>
+                </div>
+
+                <h3>Questions Clés</h3>
+                <div class="key-questions">
+                    <h4>🤔 Questions à se poser :</h4>
+                    <ul>
+                        <li>L'efficacité fiscale est-elle acceptable ? (> 0.5€ récupéré / 1€ taxé)</li>
+                        <li>Le nombre d'emplois perdus justifie-t-il les recettes collectées ?</li>
+                        <li>L'impact sur l'innovation et la compétitivité est-il acceptable ?</li>
+                        <li>Existe-t-il des alternatives moins destructrices ?</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="methodology-section">
+                <h2>🔗 Aller Plus Loin</h2>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <h4>📄 ImpactEmploi.md</h4>
+                        <p>5 méthodes d'estimation de l'impact sur l'emploi</p>
+                    </div>
+
+                    <div class="resource-card">
+                        <h4>📄 ImpactBenefice.md</h4>
+                        <p>5 méthodes d'estimation de l'impact sur les bénéfices</p>
+                    </div>
+
+                    <div class="resource-card">
+                        <h4>📄 ImpactFaillite.md</h4>
+                        <p>5 méthodes de prédiction du risque de faillite</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>💡 ZucIt - Visualisation des effets économiques "qui ne se voient pas" (F. Bastiat)</p>
+        </footer>
+    </div>
+</body>
+</html>
