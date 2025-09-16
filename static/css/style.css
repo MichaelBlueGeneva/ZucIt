@@ -652,6 +652,41 @@ footer {
     animation: fadeInUp 0.6s ease-out;
 }
 
+.disclaimer-box {
+    background: linear-gradient(135deg, #fef3c7, #fed7aa);
+    border: 2px solid #f59e0b;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.disclaimer-box p {
+    margin: 0;
+    color: #92400e;
+    font-weight: 500;
+}
+
+.insight-box {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border: 2px solid #3b82f6;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.insight-box h4 {
+    margin: 0 0 12px 0;
+    color: #1e40af;
+    font-size: 1.1em;
+}
+
+.insight-box p {
+    margin: 8px 0;
+    color: #1e3a8a;
+    line-height: 1.5;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .container {

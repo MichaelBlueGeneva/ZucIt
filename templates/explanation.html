@@ -52,7 +52,7 @@
                     <div class="param-card">
                         <h4>Entreprises types</h4>
                         <p><strong>4 profils</strong></p>
-                        <small>Apple, Microsoft, Google, Startup</small>
+                        <small>LVMH, L'Oréal, TotalEnergies, Startup French Tech</small>
                     </div>
                 </div>
             </section>
@@ -70,7 +70,8 @@
                     <small>Croissance valorisation = 80% de la croissance profits</small>
 
                     <h4>Emplois :</h4>
-                    <code>Employés(t) = Bénéfice(t) × ratio_emploi_profit_initial</code>
+                    <code>Employés(t) = Employés_initiaux × [1 + (croissance_profit - 1) × 0.7]</code>
+                    <small>70% de la croissance des bénéfices se traduit par de la croissance d'emploi</small>
 
                     <h4>Recettes État :</h4>
                     <code>Recettes(t) = Bénéfice(t) × 25%</code>
@@ -99,10 +100,14 @@
                     <code>Impact_Financement = -(Cash_flow_impact × 15%) × 0.05</code>
                     <small>Moins de cash-flow → Coûts de financement plus élevés</small>
 
-                    <h4>Emploi - Méthode Mixte Productivité-Demande :</h4>
-                    <code>Emploi = Emploi_initial + Effet_Productivité + Effet_Demande</code>
-                    <small>Effet productivité: +30% si moins d'investissement (plus d'emploi pour même production)</small>
-                    <small>Effet demande: -80% si prix plus élevés (moins de demande = moins d'emplois)</small>
+                    <h4>Emploi - Méthode Mixte Productivité-Demande (avec bornes) :</h4>
+                    <code>Effet_Productivité = min(0.5, max(-0.5, productivity_factor)) × 30% × Employés</code>
+                    <code>Effet_Demande = prix_increase × (-1.2) × 80% × Employés</code>
+                    <code>Variation_Max = ±50% par an</code>
+                    <code>Plafond_Max = 5× Employés_initiaux</code>
+                    <small>Effet productivité: saturé à ±50% pour éviter explosions mathématiques</small>
+                    <small>Effet demande: prix plus élevés → moins de demande → moins d'emplois</small>
+                    <small>Bornes strictes: variation max 50%/an, plafond 5x initial</small>
 
                     <h4>Évolution des prix :</h4>
                     <code>Prix(t) = Prix(t-1) + 70% × (Taxe_Zucman / CA)</code>
@@ -129,6 +134,14 @@
                 <div class="kpi-explanation">
                     <code>Recettes_Supplémentaires = Σ(Recettes_avec_Zucman) - Σ(Recettes_sans_Zucman)</code>
                     <p>Argent supplémentaire collecté par l'État sur 20 ans grâce à la taxe Zucman.</p>
+
+                    <div class="insight-box">
+                        <h4>💡 Pourquoi les recettes augmentent-elles ?</h4>
+                        <p><strong>C'est normal !</strong> La taxe Zucman (2.857% sur valorisation) rapporte énormément comparée à l'IS (25% sur bénéfices).</p>
+                        <p><strong>Exemple LVMH :</strong> Zucman = ~11Md€/an, IS = ~3.8Md€/an</p>
+                        <p>Même si les bénéfices baissent (donc l'IS diminue), la taxe Zucman sur la valorisation compense largement.</p>
+                        <p><strong>⚠️ Attention :</strong> Plus de recettes ≠ Bonne politique si l'efficacité fiscale < 1€</p>
+                    </div>
                 </div>
 
                 <h3>Efficacité Fiscale</h3>
@@ -223,20 +236,46 @@
 
             <section class="methodology-section">
                 <h2>🔗 Aller Plus Loin</h2>
+
+                <div class="disclaimer-box">
+                    <p><strong>⚠️ Disclaimer :</strong> Ce simulateur n'a aucun lien avec les sites mentionnés ci-dessous. Ces références sont proposées uniquement à titre informatif pour approfondir les concepts économiques.</p>
+                </div>
+
                 <div class="resources-grid">
+                    <div class="resource-card">
+                        <h4>🏛️ Institut des Libertés</h4>
+                        <p><a href="https://institutdeslibertes.org" target="_blank" rel="noopener">institutdeslibertes.org</a></p>
+                        <small>Think tank libéral français - analyses économiques</small>
+                    </div>
+
+                    <div class="resource-card">
+                        <h4>🎓 Institut Mises</h4>
+                        <p><a href="https://mises.org" target="_blank" rel="noopener">mises.org</a></p>
+                        <small>École autrichienne d'économie - théorie économique</small>
+                    </div>
+
                     <div class="resource-card">
                         <h4>📄 ImpactEmploi.md</h4>
                         <p>5 méthodes d'estimation de l'impact sur l'emploi</p>
+                        <small>Documentation technique du projet</small>
                     </div>
 
                     <div class="resource-card">
                         <h4>📄 ImpactBenefice.md</h4>
                         <p>5 méthodes d'estimation de l'impact sur les bénéfices</p>
+                        <small>Documentation technique du projet</small>
                     </div>
 
                     <div class="resource-card">
                         <h4>📄 ImpactFaillite.md</h4>
                         <p>5 méthodes de prédiction du risque de faillite</p>
+                        <small>Documentation technique du projet</small>
+                    </div>
+
+                    <div class="resource-card">
+                        <h4>📄 ExplicationEmploi.md</h4>
+                        <p>Analyse du bug de l'explosion d'emplois Apple</p>
+                        <small>Fixes mathématiques appliqués</small>
                     </div>
                 </div>
             </section>

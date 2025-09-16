@@ -11,35 +11,35 @@ def ensure_real(value):
         return value.real
     return value
 
-# Exemples d'entreprises
+# Exemples d'entreprises françaises
 EXAMPLE_COMPANIES = {
-    "apple": {
-        "name": "Apple Inc.",
-        "valuation": 3000000000000,  # 3T€
-        "profit": 100000000000,     # 100B€
-        "employees": 164000,
-        "growth_rate": 0.08         # 8%
-    },
-    "microsoft": {
-        "name": "Microsoft Corp.",
-        "valuation": 2800000000000,  # 2.8T€
-        "profit": 83000000000,      # 83B€
-        "employees": 221000,
-        "growth_rate": 0.12         # 12%
-    },
-    "google": {
-        "name": "Google/Alphabet",
-        "valuation": 1700000000000,  # 1.7T€
-        "profit": 76000000000,      # 76B€
-        "employees": 190000,
+    "lvmh": {
+        "name": "LVMH",
+        "valuation": 380000000000,   # 380B€
+        "profit": 15000000000,      # 15B€
+        "employees": 200000,
         "growth_rate": 0.10         # 10%
     },
+    "loreal": {
+        "name": "L'Oréal",
+        "valuation": 230000000000,   # 230B€
+        "profit": 6800000000,       # 6.8B€
+        "employees": 88000,
+        "growth_rate": 0.08         # 8%
+    },
+    "totalenergies": {
+        "name": "TotalEnergies",
+        "valuation": 140000000000,   # 140B€
+        "profit": 20800000000,      # 20.8B€
+        "employees": 105000,
+        "growth_rate": 0.06         # 6%
+    },
     "startup": {
-        "name": "Startup Tech",
-        "valuation": 50000000,       # 50M€
-        "profit": 2000000,          # 2M€
-        "employees": 50,
-        "growth_rate": 0.25         # 25%
+        "name": "Startup French Tech",
+        "valuation": 100000000,      # 100M€
+        "profit": 5000000,          # 5M€
+        "employees": 120,
+        "growth_rate": 0.30         # 30%
     }
 }
 
@@ -167,8 +167,15 @@ def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None
         no_zucman["valuations"].append(current_valuation_no_zuc)
         no_zucman["prices"].append(current_price_no_zuc)
 
-        # Employés avec méthode mixte productivité-demande (sans Zucman)
-        current_employees_no_zuc = employees  # Pas d'impact sans taxe
+        # Employés sans Zucman: croissance proportionnelle aux bénéfices
+        # Hypothèse: 70% de la croissance des bénéfices se traduit par de la croissance d'emploi
+        if year == 0:
+            current_employees_no_zuc = employees
+        else:
+            profit_growth_factor = current_profit_no_zuc / profit if profit > 0 else 1.0
+            employment_growth_factor = 1 + (profit_growth_factor - 1) * 0.7
+            current_employees_no_zuc = int(employees * employment_growth_factor)
+
         no_zucman["employees"].append(current_employees_no_zuc)
 
         # Recettes état: 25% des bénéfices
