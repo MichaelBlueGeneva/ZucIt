@@ -152,6 +152,10 @@ class ZucItApp {
         document.getElementById('jobs-lost').textContent =
             `${kpis.jobs_lost.toLocaleString()} emplois`;
 
+        // Hausse des prix
+        document.getElementById('price-increase-percent').textContent =
+            `+${kpis.price_increase_percent.toFixed(1)}%`;
+
         // Recettes supplémentaires de l'État (avec gestion du signe et coloring)
         const revenueCard = document.getElementById('revenue-kpi-card');
         const revenueTitle = document.getElementById('revenue-kpi-title');
@@ -284,6 +288,33 @@ class ZucItApp {
                 ]
             },
             options: this.getChartOptions('Valorisation (€)', true)
+        });
+
+        // Graphique des prix
+        this.charts.prices = new Chart(document.getElementById('prices-chart'), {
+            type: 'line',
+            data: {
+                labels: years,
+                datasets: [
+                    {
+                        label: 'Sans Zucman',
+                        data: noZucman.prices,
+                        borderColor: '#059669',
+                        backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                        borderWidth: 3,
+                        fill: true
+                    },
+                    {
+                        label: 'Avec Zucman',
+                        data: withZucman.prices,
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        borderWidth: 3,
+                        fill: true
+                    }
+                ]
+            },
+            options: this.getChartOptions('Index des prix (base 100)', false)
         });
     }
 

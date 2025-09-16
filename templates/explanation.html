@@ -76,25 +76,37 @@
                     <code>Recettes(t) = Bénéfice(t) × 25%</code>
                 </div>
 
-                <h3>2. Scénario AVEC Zucman</h3>
+                <h3>2. Scénario AVEC Zucman - Modèle Économique Complet</h3>
                 <div class="calculation-box">
                     <h4>Taxe annuelle Zucman :</h4>
                     <code>Taxe_Zucman(t) = Valorisation(t) × 2.857%</code>
 
-                    <h4>Impact sur la croissance des bénéfices :</h4>
-                    <code>Bénéfice(t) = Bénéfice(t-1) × (1 + taux_croissance) × (1 - 0.15)</code>
-                    <small>Réduction de 15% de la croissance due à moins d'investissements</small>
+                    <h4>Impact sur les bénéfices via 4 canaux :</h4>
 
-                    <h4>Impact sur la valorisation :</h4>
-                    <code>Valorisation(t) = Valorisation(t-1) × (1 + taux_croissance × 0.6)</code>
-                    <small>Croissance réduite à 60% au lieu de 80%</small>
+                    <strong>Canal 1 - Investissement :</strong>
+                    <code>Impact_Investment = (Investment_disponible / Profit)^0.4 - 1</code>
+                    <small>Moins de liquidités → Moins d'investissement → Moins de productivité</small>
 
-                    <h4>Emplois avec plancher :</h4>
-                    <code>Employés(t) = max(10% × Employés_initiaux, Bénéfice(t) × ratio_emploi)</code>
-                    <small>Minimum 10% des effectifs initiaux conservés</small>
+                    <strong>Canal 2 - Prix-Demande :</strong>
+                    <code>Impact_Demande = (Prix_increase × Élasticité_demande) × 0.3</code>
+                    <small>70% de la taxe reportée sur les prix → Baisse de demande</small>
 
-                    <h4>Recettes État totales :</h4>
-                    <code>Recettes(t) = Bénéfice(t) × 25% + Taxe_Zucman(t)</code>
+                    <strong>Canal 3 - Compétitivité :</strong>
+                    <code>Impact_Compétitivité = (Coût_increase × Élasticité_marché) × 0.25</code>
+                    <small>Coûts plus élevés → Perte de parts de marché</small>
+
+                    <strong>Canal 4 - Financement :</strong>
+                    <code>Impact_Financement = -(Cash_flow_impact × 15%) × 0.05</code>
+                    <small>Moins de cash-flow → Coûts de financement plus élevés</small>
+
+                    <h4>Emploi - Méthode Mixte Productivité-Demande :</h4>
+                    <code>Emploi = Emploi_initial + Effet_Productivité + Effet_Demande</code>
+                    <small>Effet productivité: +30% si moins d'investissement (plus d'emploi pour même production)</small>
+                    <small>Effet demande: -80% si prix plus élevés (moins de demande = moins d'emplois)</small>
+
+                    <h4>Évolution des prix :</h4>
+                    <code>Prix(t) = Prix(t-1) + 70% × (Taxe_Zucman / CA)</code>
+                    <small>70% de la taxe Zucman reportée sur les prix consommateurs</small>
                 </div>
             </section>
 
@@ -123,6 +135,12 @@
                 <div class="kpi-explanation">
                     <code>Efficacité = Recettes_Supplémentaires / Taxe_Zucman_Totale_Collectée</code>
                     <p>Mesure combien l'État récupère réellement par euro de taxe prélevé, en tenant compte des effets de bord (baisse d'impôt sur les sociétés due à la baisse des profits).</p>
+                </div>
+
+                <h3>Augmentation des Prix</h3>
+                <div class="kpi-explanation">
+                    <code>Hausse_Prix = (Prix_avec_Zucman(20) - Prix_sans_Zucman(20)) / Prix_sans_Zucman(20)</code>
+                    <p>Mesure l'inflation générée par la répercussion de la taxe Zucman sur les prix consommateurs. 70% de la taxe est typiquement répercutée sur les prix.</p>
                 </div>
             </section>
 

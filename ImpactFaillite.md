@@ -214,38 +214,120 @@ def sensitivity_analysis():
     return results
 ```
 
-## Recommandations d'usage
+## Disponibilité des Données Publiques
 
-**Pour ZucIt :** Combiner **Méthode 2 (Trésorerie)** et **Méthode 3 (Couverture)**
+### Données Facilement Accessibles
+- **Chiffre d'affaires** : Rapports annuels, bilans comptables
+- **Bénéfices/Pertes** : Comptes de résultat publics
+- **Capitalisation boursière** : Données de marché temps réel
+- **Nombre d'employés** : Rapports sociaux, LinkedIn, estimations
+- **Dette totale** : Bilans comptables (dettes court + long terme)
 
-### Méthode 2 - Seuil de Trésorerie (Approche court terme)
-- Calcul mensuel du burn rate avec Zucman
-- Alerte si < 12 mois de trésorerie
-- Faillite si < 3 mois de trésorerie
+### Données Partiellement Accessibles
+- **Trésorerie** : Souvent dans les bilans consolidés (grandes entreprises)
+- **EBITDA** : Calculable à partir des données comptables publiques
+- **Charges financières** : Notes aux comptes, rapports détaillés
 
-### Méthode 3 - Ratio de Couverture (Approche structurelle)
-- Surveillance du ratio EBITDA/Charges financières
-- Dégradation de notation si ratio < 2
-- Défaut technique si ratio < 1.2
+### Données Difficiles d'Accès
+- **Flux de trésorerie opérationnels détaillés** : PME/startups privées
+- **Répartition des investissements** : Information stratégique
+- **Covenants bancaires** : Contrats privés
 
-**Implémentation combinée :**
+## Méthodes Adaptées aux Données ZucIt
+
+### Méthode 1: Ratio Dette/Valorisation Simplifié
+**Données requises :** Valorisation (donnée), Estimation dette (2x profit annuel)
 ```python
-def bankruptcy_risk_assessment(company_data, zucman_tax):
-    # Test trésorerie
-    months_remaining = calculate_cash_runway(company_data, zucman_tax)
-
-    # Test couverture
-    coverage_ratio = calculate_coverage_ratio(company_data, zucman_tax)
-
-    # Score combiné
-    if months_remaining < 3 or coverage_ratio < 1.2:
-        return "Faillite imminente"
-    elif months_remaining < 12 or coverage_ratio < 2:
-        return "Difficulté sévère"
-    elif months_remaining < 24 or coverage_ratio < 3:
-        return "Surveillance accrue"
-    else:
-        return "Situation stable"
+def debt_ratio_risk(valuation, estimated_debt):
+    ratio = estimated_debt / valuation
+    if ratio > 0.7: return "Risque élevé"
+    elif ratio > 0.4: return "Risque modéré"
+    else: return "Risque faible"
 ```
 
-Cette approche combinée donne une vision à la fois **immédiate** (trésorerie) et **structurelle** (rentabilité) du risque de faillite.
+### Méthode 2: Burn Rate sur Profit
+**Données requises :** Profit, Taxe Zucman, Charges fixes estimées
+```python
+def profit_burn_analysis(profit, zucman_tax, growth_rate):
+    net_profit_after_tax = profit - zucman_tax
+    if net_profit_after_tax < 0:
+        # Calcul années avant épuisement des réserves
+        estimated_reserves = profit * 2  # 2 ans de profit en réserve
+        monthly_burn = abs(net_profit_after_tax) / 12
+        months_to_bankruptcy = estimated_reserves / monthly_burn
+        return f"Faillite dans {months_to_bankruptcy:.1f} mois"
+    return "Profitable"
+```
+
+### Méthode 3: Seuil de Rentabilité Critique
+**Données requises :** Profit, Valorisation, Taux de croissance
+```python
+def profitability_threshold_risk(profit, valuation, zucman_tax):
+    profit_margin = profit / (profit / 0.1)  # Estimation CA avec marge 10%
+
+    # Seuils critiques basés sur la marge
+    if profit_margin < 0.02:  # < 2% marge
+        return "Faillite imminente"
+    elif profit_margin < 0.05:  # < 5% marge
+        return "Zone rouge"
+    elif profit_margin < 0.10:  # < 10% marge
+        return "Zone orange"
+    else:
+        return "Zone verte"
+```
+
+## Recommandations d'usage pour ZucIt
+
+**Méthode recommandée :** **Combinaison 2+3** (Burn Rate + Seuils de Rentabilité)
+
+### Implémentation Pratique pour ZucIt:
+```python
+def zucit_bankruptcy_risk(valuation, profit, employees, zucman_tax):
+    # Méthode 2: Analyse Burn Rate
+    net_profit = profit - zucman_tax
+    if net_profit < 0:
+        estimated_reserves = valuation * 0.05  # 5% de la valorisation en réserves
+        monthly_burn = abs(net_profit) / 12
+        months_survival = estimated_reserves / monthly_burn
+
+        if months_survival < 6:
+            return "Faillite imminente (< 6 mois)"
+        elif months_survival < 18:
+            return "Difficulté sévère (< 18 mois)"
+        else:
+            return "Situation tendue mais gérable"
+
+    # Méthode 3: Seuils de rentabilité
+    estimated_revenue = profit / 0.08  # Marge nette 8% typique
+    new_margin = net_profit / estimated_revenue
+
+    if new_margin < 0:
+        return "Pertes - Restructuration nécessaire"
+    elif new_margin < 0.02:
+        return "Marge critique - Risque faillite"
+    elif new_margin < 0.05:
+        return "Marge faible - Surveillance"
+    else:
+        return "Situation financière stable"
+
+# Intégration dans ZucIt
+def add_bankruptcy_kpi(simulation_results):
+    final_profit = simulation_results["with_zucman"]["profits"][-1]
+    final_valuation = simulation_results["with_zucman"]["valuations"][-1]
+    final_zucman_tax = final_valuation * 0.02857
+
+    bankruptcy_risk = zucit_bankruptcy_risk(
+        final_valuation, final_profit, 1000, final_zucman_tax
+    )
+
+    simulation_results["kpis"]["bankruptcy_risk"] = bankruptcy_risk
+    return simulation_results
+```
+
+### Avantages de cette approche:
+- **Utilise uniquement les données disponibles dans ZucIt**
+- **Méthodes simples et explicables** aux utilisateurs
+- **Résultats concrets** : nombre de mois ou état qualitatif
+- **Adaptable** selon le profil d'entreprise (startup vs grande entreprise)
+
+Cette approche pragmatique permet d'estimer le risque de faillite sans données comptables complexes, en se basant sur les paramètres déjà disponibles dans la simulation ZucIt.
