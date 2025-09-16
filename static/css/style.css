@@ -287,6 +287,11 @@ header h1 {
     border-color: #86efac;
 }
 
+.kpi-card.warning {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border-color: #fbbf24;
+}
+
 .kpi-card h3 {
     font-size: 1rem;
     margin-bottom: 15px;

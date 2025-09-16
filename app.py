@@ -43,6 +43,69 @@ EXAMPLE_COMPANIES = {
     }
 }
 
+def analyze_bankruptcy_risk(initial_valuation, initial_profit, initial_employees,
+                           final_profit, final_valuation, final_zucman_tax, simulation_years):
+    """
+    Analyse le risque de faillite basée sur les méthodes 2+3 de ImpactFaillite.md
+    """
+
+    # Méthode 2: Analyse Burn Rate
+    net_profit = final_profit - final_zucman_tax
+
+    if net_profit < 0:
+        # Estimation des réserves (5% de la valorisation initiale)
+        estimated_reserves = initial_valuation * 0.05
+        monthly_burn = abs(net_profit) / 12
+        months_survival = estimated_reserves / monthly_burn if monthly_burn > 0 else float('inf')
+
+        if months_survival < 6:
+            return {
+                "risk_level": "Faillite imminente",
+                "bankruptcy_year": 2024 + simulation_years,
+                "survival_status": "failed"
+            }
+        elif months_survival < 18:
+            return {
+                "risk_level": "Difficulté sévère",
+                "bankruptcy_year": 2024 + simulation_years + int(months_survival/12),
+                "survival_status": "critical"
+            }
+        else:
+            return {
+                "risk_level": "Situation tendue",
+                "bankruptcy_year": None,
+                "survival_status": "struggling"
+            }
+
+    # Méthode 3: Seuils de rentabilité
+    estimated_revenue = initial_profit / 0.08  # Marge nette 8% typique
+    new_margin = net_profit / estimated_revenue if estimated_revenue > 0 else 0
+
+    if new_margin < 0:
+        return {
+            "risk_level": "Restructuration nécessaire",
+            "bankruptcy_year": 2024 + simulation_years + 2,  # 2 ans pour restructuration
+            "survival_status": "critical"
+        }
+    elif new_margin < 0.02:
+        return {
+            "risk_level": "Marge critique",
+            "bankruptcy_year": 2024 + simulation_years + 3,  # 3 ans avant faillite probable
+            "survival_status": "critical"
+        }
+    elif new_margin < 0.05:
+        return {
+            "risk_level": "Surveillance accrue",
+            "bankruptcy_year": None,
+            "survival_status": "warning"
+        }
+    else:
+        return {
+            "risk_level": "Situation stable",
+            "bankruptcy_year": None,
+            "survival_status": "healthy"
+        }
+
 def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None):
     """
     Simule l'effet de la taxe Zucman sur 20 ans avec modèle économique complet
@@ -129,17 +192,27 @@ def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None
             productivity_impact = investment_reduction / current_profit_with_zuc * app.config['INVESTMENT_ELASTICITY']
         else:
             productivity_impact = 0
-        employment_from_productivity = productivity_impact * app.config['PRODUCTIVITY_EMPLOYMENT_ELASTICITY'] * employees
+
+        # Solution 2: Productivité Progressive avec saturation
+        productivity_factor = min(0.5, max(-0.5, productivity_impact))
+        employment_from_productivity = productivity_factor * app.config['PRODUCTIVITY_EMPLOYMENT_ELASTICITY'] * employees
 
         # Canal 2: Effet Demande (prix plus élevés → moins de demande → moins d'emploi)
         price_increase_pct = (current_price_with_zuc - base_price) / base_price
         demand_reduction = price_increase_pct * app.config['DEMAND_ELASTICITY']
         employment_from_demand = demand_reduction * app.config['DEMAND_EMPLOYMENT_ELASTICITY'] * employees
 
-        # Effet net sur l'emploi
+        # Effet net sur l'emploi avec bornes strictes
         net_employment_change = employment_from_productivity + employment_from_demand
+
+        # Solution 1: Borner les Variations d'Emploi (±50% par an maximum)
+        max_change = employees * 0.5
+        net_employment_change = max(-max_change, min(max_change, net_employment_change))
+
         min_employees = max(1, int(employees * 0.05))  # Plancher 5%
-        current_employees_with_zuc = max(min_employees, int(employees + net_employment_change))
+        # Solution 3: Plafond Absolu Réaliste (5x les employés initiaux)
+        max_employees = employees * 5
+        current_employees_with_zuc = max(min_employees, min(max_employees, int(employees + net_employment_change)))
 
         with_zucman["employees"].append(current_employees_with_zuc)
 
@@ -219,6 +292,16 @@ def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None
     final_price_increase = with_zucman["prices"][-1] - no_zucman["prices"][-1]
     price_increase_percent = (final_price_increase / no_zucman["prices"][-1]) * 100
 
+    # Nouveau KPI: Analyse de faillite
+    final_profit_with_zucman = with_zucman["profits"][-1]
+    final_valuation_with_zucman = with_zucman["valuations"][-1]
+    final_zucman_tax = final_valuation_with_zucman * app.config['ZUCMAN_TAX_RATE']
+
+    bankruptcy_analysis = analyze_bankruptcy_risk(
+        valuation, profit, employees, final_profit_with_zucman,
+        final_valuation_with_zucman, final_zucman_tax, years
+    )
+
     kpis = {
         "profit_loss_percent": (final_profit_diff / no_zucman["profits"][-1]) * 100 if no_zucman["profits"][-1] > 0 else 0,
         "profit_loss_amount": final_profit_diff,
@@ -228,7 +311,10 @@ def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None
         "tax_efficiency": total_zucman_revenue / total_zucman_tax_collected if total_zucman_tax_collected > 0 else 0,
         "total_zucman_tax_collected": total_zucman_tax_collected,
         "price_increase_percent": price_increase_percent,
-        "price_increase_absolute": final_price_increase
+        "price_increase_absolute": final_price_increase,
+        "bankruptcy_risk": bankruptcy_analysis["risk_level"],
+        "bankruptcy_year": bankruptcy_analysis["bankruptcy_year"],
+        "survival_status": bankruptcy_analysis["survival_status"]
     }
 
     return {

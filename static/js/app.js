@@ -159,20 +159,74 @@ class ZucItApp {
         // Recettes supplémentaires de l'État (avec gestion du signe et coloring)
         const revenueCard = document.getElementById('revenue-kpi-card');
         const revenueTitle = document.getElementById('revenue-kpi-title');
-        const revenueAmount = this.formatCurrencyMillions(kpis.additional_tax_revenue);
+
+        // Format intelligent : millions ou milliards selon la taille
+        let revenueDisplayText;
+        const absRevenue = Math.abs(kpis.additional_tax_revenue);
+
+        if (absRevenue >= 1000000000) {
+            // Milliards
+            const billions = (kpis.additional_tax_revenue / 1000000000).toFixed(1);
+            revenueDisplayText = `${billions} Md€`;
+        } else {
+            // Millions
+            const millions = (kpis.additional_tax_revenue / 1000000).toFixed(1);
+            revenueDisplayText = `${millions} M€`;
+        }
 
         if (kpis.additional_tax_revenue >= 0) {
             revenueTitle.textContent = '🏛️ Recettes État supplémentaires';
-            document.getElementById('additional-tax-revenue').textContent = `+${revenueAmount} M€`;
+            document.getElementById('additional-tax-revenue').textContent = `+${revenueDisplayText}`;
             revenueCard.className = 'kpi-card positive';
         } else {
             revenueTitle.textContent = '🏛️ Recettes État perdues';
-            document.getElementById('additional-tax-revenue').textContent = `${revenueAmount} M€`; // Le - est déjà inclus
+            document.getElementById('additional-tax-revenue').textContent = revenueDisplayText; // Le - est déjà inclus
             revenueCard.className = 'kpi-card negative';
         }
 
         document.getElementById('tax-efficiency').textContent =
             `${kpis.tax_efficiency.toFixed(2)}€ récupérés / 1€ taxé`;
+
+        // KPI de survie/faillite
+        const survivalCard = document.getElementById('survival-kpi-card');
+        const survivalStatus = document.getElementById('survival-status');
+        const bankruptcyInfo = document.getElementById('bankruptcy-info');
+
+        switch (kpis.survival_status) {
+            case 'healthy':
+                survivalStatus.textContent = '✅ SURVIVANTE';
+                bankruptcyInfo.textContent = 'Situation financière stable';
+                survivalCard.className = 'kpi-card positive';
+                break;
+            case 'warning':
+                survivalStatus.textContent = '⚠️ SURVEILLANCE';
+                bankruptcyInfo.textContent = 'Marge faible - Surveillance requise';
+                survivalCard.className = 'kpi-card warning';
+                break;
+            case 'struggling':
+                survivalStatus.textContent = '😰 DIFFICULTÉ';
+                bankruptcyInfo.textContent = 'Situation tendue mais gérable';
+                survivalCard.className = 'kpi-card warning';
+                break;
+            case 'critical':
+                survivalStatus.textContent = '🆘 CRITIQUE';
+                if (kpis.bankruptcy_year) {
+                    bankruptcyInfo.textContent = `Faillite probable en ${kpis.bankruptcy_year}`;
+                } else {
+                    bankruptcyInfo.textContent = 'Restructuration urgente nécessaire';
+                }
+                survivalCard.className = 'kpi-card negative';
+                break;
+            case 'failed':
+                survivalStatus.textContent = '☠️ FAILLITE';
+                bankruptcyInfo.textContent = `Faillite en ${kpis.bankruptcy_year}`;
+                survivalCard.className = 'kpi-card negative';
+                break;
+            default:
+                survivalStatus.textContent = '❓ INCONNU';
+                bankruptcyInfo.textContent = 'Analyse en cours...';
+                survivalCard.className = 'kpi-card';
+        }
     }
 
     createCharts(results) {
