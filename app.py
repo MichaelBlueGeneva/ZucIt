@@ -5,6 +5,12 @@ from config import Config
 app = Flask(__name__)
 app.config.from_object(Config)
 
+def ensure_real(value):
+    """S'assurer qu'une valeur est un nombre réel, pas complexe."""
+    if isinstance(value, complex):
+        return value.real
+    return value
+
 # Exemples d'entreprises
 EXAMPLE_COMPANIES = {
     "apple": {
@@ -38,13 +44,22 @@ EXAMPLE_COMPANIES = {
 }
 
 def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None):
-    if years is None:
-        years = app.config['SIMULATION_YEARS']
     """
     Simule l'effet de la taxe Zucman sur 20 ans avec modèle économique complet
     Taxe Zucman: 2.857% sur la valorisation (2% + flat tax)
     Taxe normale: 25% sur les bénéfices
     """
+    
+    # Validation des entrées pour éviter les divisions par zéro
+    if profit <= 0:
+        profit = max(1000000, valuation * 0.001)  # Minimum 1M ou 0.1% de la valorisation
+    if valuation <= 0:
+        valuation = profit * 10  # Valorisation minimum basée sur le profit
+    if employees <= 0:
+        employees = 1000  # Minimum d'employés
+    
+    if years is None:
+        years = app.config['SIMULATION_YEARS']
 
     # Données pour les graphiques
     years_data = []
@@ -109,7 +124,11 @@ def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None
 
         # Canal 1: Effet Productivité (moins d'investissement → moins de productivité → plus d'emploi pour même production)
         investment_reduction = zucman_tax * app.config['INVESTMENT_RATIO_OF_PROFIT']
-        productivity_impact = investment_reduction / current_profit_with_zuc * app.config['INVESTMENT_ELASTICITY']
+        # Protection contre division par zéro
+        if current_profit_with_zuc > 0:
+            productivity_impact = investment_reduction / current_profit_with_zuc * app.config['INVESTMENT_ELASTICITY']
+        else:
+            productivity_impact = 0
         employment_from_productivity = productivity_impact * app.config['PRODUCTIVITY_EMPLOYMENT_ELASTICITY'] * employees
 
         # Canal 2: Effet Demande (prix plus élevés → moins de demande → moins d'emploi)
@@ -139,27 +158,38 @@ def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None
 
             # Canal 1: Impact Investissement
             investment_available = current_profit_with_zuc - zucman_tax * app.config['INVESTMENT_RATIO_OF_PROFIT']
-            investment_impact = (investment_available / current_profit_with_zuc) ** app.config['INVESTMENT_ELASTICITY']
-            canal_investment = base_growth_with_zuc * (investment_impact - 1) * 0.4
+            # Protection contre division par zéro
+            if current_profit_with_zuc > 0:
+                investment_ratio = max(0.1, investment_available / current_profit_with_zuc)  # Éviter les valeurs négatives
+            else:
+                investment_ratio = 0.1  # Valeur par défaut
+            investment_impact = ensure_real(investment_ratio ** app.config['INVESTMENT_ELASTICITY'])
+            canal_investment = ensure_real(base_growth_with_zuc * (investment_impact - 1) * 0.4)
 
             # Canal 2: Impact Prix-Demande
             price_increase = zucman_tax * app.config['PRICE_PASS_THROUGH']
             relative_price_increase = price_increase / estimated_revenue
             demand_change = relative_price_increase * app.config['DEMAND_ELASTICITY']
-            canal_prix_demande = base_growth_with_zuc * demand_change * 0.3
+            canal_prix_demande = ensure_real(base_growth_with_zuc * demand_change * 0.3)
 
             # Canal 3: Impact Compétitivité
             cost_increase = zucman_tax / estimated_revenue
             market_share_change = cost_increase * app.config['MARKET_SHARE_ELASTICITY']
-            canal_competitivite = base_growth_with_zuc * market_share_change * 0.25
+            canal_competitivite = ensure_real(base_growth_with_zuc * market_share_change * 0.25)
 
             # Canal 4: Impact Financement
-            cash_flow_impact = zucman_tax / current_profit_with_zuc
+            # Protection contre division par zéro
+            if current_profit_with_zuc > 0:
+                cash_flow_impact = zucman_tax / current_profit_with_zuc
+            else:
+                cash_flow_impact = 0
             financing_cost_change = cash_flow_impact * app.config['FINANCING_COST_IMPACT']
-            canal_financement = base_growth_with_zuc * (-financing_cost_change) * 0.05
+            canal_financement = ensure_real(base_growth_with_zuc * (-financing_cost_change) * 0.05)
 
             # Impact total
             total_impact = canal_investment + canal_prix_demande + canal_competitivite + canal_financement
+            # S'assurer que le résultat est un nombre réel
+            total_impact = ensure_real(total_impact)
             current_profit_with_zuc = max(0, base_growth_with_zuc + total_impact)
 
             # Mise à jour des prix
@@ -169,7 +199,8 @@ def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None
 
             # Croissance des valorisations
             current_valuation_no_zuc *= (1 + growth_rate * 0.8)
-            valuation_growth_factor = max(0.2, (current_profit_with_zuc / base_growth_with_zuc)) * 0.6
+            profit_ratio = current_profit_with_zuc / base_growth_with_zuc if base_growth_with_zuc != 0 else 1.0
+            valuation_growth_factor = max(0.2, profit_ratio) * 0.6
             current_valuation_with_zuc *= (1 + growth_rate * valuation_growth_factor)
 
     # Calcul des KPIs finaux

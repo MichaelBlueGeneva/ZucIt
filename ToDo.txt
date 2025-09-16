@@ -1,8 +1,7 @@
 Utilise le mode Think pour résoudre ces soucis
 
-- Implemente pour le benefices la methode "5. Méthode Modèle Économique Complet" de ImpactBenefice.md. Mettre les parametres necessaires dans config.py.
-- Tu ajoutera donc un KPI : Augementation des prix du a la taxe Zucman
-- Bien sur, tu expliquera le raisonnement dans la page d'explication
-- Implemente pour l'emploi la methode "5. Méthode Mixte Productivité-Demande"
-- Bien sur, tu expliquera le raisonnement dans la page d'explication
-- Pour ImpactFaillite.md, creuse les methodes en fonciton des données disponibles publiquement. Est ce qu'on a la tresorerie ou l'EBITDA par exemple ?
+- Pour ImpactFaillite.md, tu as creuse les methodes en fonciton des données disponibles publiquement
+Maintenant, propose moi la meilleure methode et va chercher les data necessaires pour les entreprises de tests (et ajouter sur l'UI pour personnaliser)
+- Recettes État supplémentaires : Le nombre tiens sur 2 lignes. Affiche en millions ou en milliard suivant le chiffre
+- Ajoute un KPI : Encore présent aprés 20 ans ou Faillite en XXXX provoquée par la taxe Zucman. Vert ou rouge donc
+- Sur l'exemple d'Apple, tu as un pic d'emploi suivit d'une chute avec Zucman en 2043. Et a partir de 2036, les emplois augmewnent avec la taxe zucman. Explique moi dans un fichier ExploicationUmploi.md
