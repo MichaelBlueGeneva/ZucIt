@@ -5,3 +5,4 @@ Il dit Veuillez saisir une valeur vaide et propose 2999,901 ou 3000,001
 - Recettes État perdues -2193416.7 M€ : Tu es sur du montant ?
 - Propose moi 5 methodes pour estimer l'impact sur l'emploi que tu mettra dans un fichier ImpactEmploi.md
 - Propose moi 5 methodes pour estimer l'impact sur le benefice que tu mettra dans un fichier ImpactBenefice.md
+- Propose moi 5 methodes pour estimer quand l'entreprise ferai faillite  que tu mettra dans un fichier ImpactFaillite.md
