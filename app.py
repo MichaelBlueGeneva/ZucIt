@@ -333,11 +333,14 @@ def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None
 
 @app.route('/')
 def index():
-    return render_template('index.html', companies=EXAMPLE_COMPANIES)
+    return render_template('index.html', 
+                         companies=EXAMPLE_COMPANIES,
+                         google_analytics_id=app.config.get('GOOGLE_ANALYTICS_ID'))
 
 @app.route('/methodology')
 def methodology():
-    return render_template('explanation.html')
+    return render_template('explanation.html',
+                         google_analytics_id=app.config.get('GOOGLE_ANALYTICS_ID'))
 
 @app.route('/simulate', methods=['POST'])
 def simulate():

@@ -12,6 +12,9 @@ class Config:
 
     # Flask configuration
     SECRET_KEY = os.environ.get('SECRET_KEY', 'zucit-dev-secret-key-2024')
+    
+    # Analytics configuration
+    GOOGLE_ANALYTICS_ID = os.environ.get('GOOGLE_ANALYTICS_ID', '')
 
     # Application settings
     SIMULATION_YEARS = 20

@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    {% if google_analytics_id %}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ google_analytics_id }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ google_analytics_id }}');
+    </script>
+    {% endif %}
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZucIt - Méthodologie et Calculs</title>
@@ -34,7 +45,7 @@
                     <div class="param-card">
                         <h4>Taxe Zucman</h4>
                         <p><strong>2.857%</strong> sur la valorisation</p>
-                        <small>2% taxe Zucman + 0.857% flat tax existante</small>
+                        <small>2% taxe Zucman + 0.857% flat tax existante (pour obtenir les 2%)</small>
                     </div>
 
                     <div class="param-card">
@@ -88,15 +99,15 @@
                     <code>Impact_Investment = (Investment_disponible / Profit)^0.4 - 1</code>
                     <small>Moins de liquidités → Moins d'investissement → Moins de productivité</small>
 
-                    <strong>Canal 2 - Prix-Demande :</strong>
+                    <P></P><strong>Canal 2 - Prix-Demande :</strong>
                     <code>Impact_Demande = (Prix_increase × Élasticité_demande) × 0.3</code>
                     <small>70% de la taxe reportée sur les prix → Baisse de demande</small>
 
-                    <strong>Canal 3 - Compétitivité :</strong>
+                    <P></P><strong>Canal 3 - Compétitivité :</strong>
                     <code>Impact_Compétitivité = (Coût_increase × Élasticité_marché) × 0.25</code>
                     <small>Coûts plus élevés → Perte de parts de marché</small>
 
-                    <strong>Canal 4 - Financement :</strong>
+                    <P></P><strong>Canal 4 - Financement :</strong>
                     <code>Impact_Financement = -(Cash_flow_impact × 15%) × 0.05</code>
                     <small>Moins de cash-flow → Coûts de financement plus élevés</small>
 
@@ -254,29 +265,6 @@
                         <small>École autrichienne d'économie - théorie économique</small>
                     </div>
 
-                    <div class="resource-card">
-                        <h4>📄 ImpactEmploi.md</h4>
-                        <p>5 méthodes d'estimation de l'impact sur l'emploi</p>
-                        <small>Documentation technique du projet</small>
-                    </div>
-
-                    <div class="resource-card">
-                        <h4>📄 ImpactBenefice.md</h4>
-                        <p>5 méthodes d'estimation de l'impact sur les bénéfices</p>
-                        <small>Documentation technique du projet</small>
-                    </div>
-
-                    <div class="resource-card">
-                        <h4>📄 ImpactFaillite.md</h4>
-                        <p>5 méthodes de prédiction du risque de faillite</p>
-                        <small>Documentation technique du projet</small>
-                    </div>
-
-                    <div class="resource-card">
-                        <h4>📄 ExplicationEmploi.md</h4>
-                        <p>Analyse du bug de l'explosion d'emplois Apple</p>
-                        <small>Fixes mathématiques appliqués</small>
-                    </div>
                 </div>
             </section>
         </div>
