@@ -118,8 +118,9 @@ def simulate_zucman_effect(valuation, profit, employees, growth_rate, years=None
             current_profit_with_zuc *= (1 + growth_rate)
 
             # Impact Zucman sur les bénéfices (réduction des investissements)
-            zucman_impact = current_valuation_with_zuc * app.config['ZUCMAN_TAX_RATE']
-            current_profit_with_zuc -= zucman_impact * 0.5  # 50% de la taxe impacte les bénéfices futurs
+            # Impact progressif: réduction de 10-15% de la croissance des profits, pas directement soustraction
+            zucman_impact_on_growth = 0.15  # Réduction de 15% de la croissance
+            current_profit_with_zuc *= (1 - zucman_impact_on_growth)
 
             # Croissance des valorisations (plus modérée avec Zucman)
             current_valuation_no_zuc *= (1 + growth_rate * 0.8)
