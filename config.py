@@ -7,7 +7,7 @@ import os
 class Config:
     # Server configuration
     HOST = os.environ.get('ZUCIT_HOST', '127.0.0.1')
-    PORT = int(os.environ.get('ZUCIT_PORT', 5001))
+    PORT = int(os.environ.get('ZUCIT_PORT', 5004))
     DEBUG = os.environ.get('ZUCIT_DEBUG', 'True').lower() == 'true'
 
     # Flask configuration

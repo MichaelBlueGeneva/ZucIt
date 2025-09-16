@@ -1,0 +1,10 @@
+Utilise le mode Think pour résoudre ces soucis
+
+- Configuration de l'entreprise : mettre la valorisation en milliards d'euros
+- Bénéfice annuel (€): mettre en millions
+- Pour les Résultats de la simulation, les graphes sont un peu petits, en mettre un par ligne
+- Recettes État supplémentaires, mettre en millions
+- Efficacité: -0.72€ collectés / 1€ perdu => Je ne comprend pas, plutot / 1€ taxé non comme c0'est negatif ?
+- Destruction d'emplois : on ne detruire plus d'emplois que ce qu'il y a, ce qui arrive quand le benefice est negatif. Propose moi plusieurs pistes pour evaluer l'impact sur les emplois
+- Recettes État supplémentaires est en vert. Il faudrais que ce soit en rouge si c'est negatif et aussi mettre Recettes État perdues et non supplementaires si c'est negatif. le - peut rester pour etre plus comprehensible
+
