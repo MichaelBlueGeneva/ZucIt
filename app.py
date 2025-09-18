@@ -46,7 +46,7 @@ EXAMPLE_COMPANIES = {
         "valuation": 14000000000,    # 14B$ (valuation Sept 2025 réelle)
         "profit": 36000000,         # 36M$ (60M$ revenue * 60% marge IA)
         "employees": 316,           # 316 employés officiels 2025
-        "growth_rate": 1.00         # 100% hypercroissance IA
+        "growth_rate": 0.30         # 100% hypercroissance IA mais on va limiter a 30 car sinon on part en exponmentielle
     },
     "ledger": {
         "name": "Ledger",
