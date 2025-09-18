@@ -57,3 +57,28 @@ curl -X POST http://127.0.0.1:5001/simulate -H "Content-Type: application/json" 
 - Backend: Flask 2.3.3, Python
 - Frontend: Vanilla JavaScript, Chart.js, CSS Grid/Flexbox
 - No database required (in-memory data)
+
+## Deployment
+
+### GitHub Actions Auto-Deploy to Render
+
+The repository includes a GitHub Action workflow (`.github/workflows/deploy.yml`) for automatic deployment to Render.
+
+#### Required GitHub Secrets
+
+Configure these secrets in your GitHub repository settings (Settings > Secrets and variables > Actions):
+
+1. **RENDER_SERVICE_ID**: Your Render service ID
+   - Found in your Render dashboard URL: `https://dashboard.render.com/web/srv-XXXXXXXXX`
+   - The service ID is the part after `srv-`
+
+2. **RENDER_API_KEY**: Your Render API key
+   - Generate at: https://dashboard.render.com/account/api-keys
+   - Choose "Full Access" scope
+
+#### How it works
+
+- Triggers on pushes to the `main` branch
+- Runs tests and validation
+- Automatically deploys to Render if all checks pass
+- Only deploys from the main branch for security
