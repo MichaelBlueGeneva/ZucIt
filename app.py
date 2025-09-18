@@ -11,35 +11,49 @@ def ensure_real(value):
         return value.real
     return value
 
-# Exemples d'entreprises françaises
+# Exemples d'entreprises avec données réelles 2024-2025
 EXAMPLE_COMPANIES = {
     "lvmh": {
         "name": "LVMH",
-        "valuation": 380000000000,   # 380B€
-        "profit": 15000000000,      # 15B€
-        "employees": 200000,
-        "growth_rate": 0.10         # 10%
+        "valuation": 295000000000,   # 295B$ (market cap Sept 2025)
+        "profit": 19600000000,      # 19.6B€ (profit 2024 réel)
+        "employees": 150000,        # 150k+ employés officiels
+        "growth_rate": 0.05         # 5% croissance modérée
     },
     "loreal": {
         "name": "L'Oréal",
-        "valuation": 230000000000,   # 230B€
-        "profit": 6800000000,       # 6.8B€
-        "employees": 88000,
-        "growth_rate": 0.08         # 8%
+        "valuation": 200000000000,   # 200B€ (market cap 2024)
+        "profit": 6800000000,       # 6.8B€ (profit 2024 réel)
+        "employees": 88000,         # 88k employés
+        "growth_rate": 0.05         # 5.1% croissance 2024
     },
     "totalenergies": {
         "name": "TotalEnergies",
-        "valuation": 140000000000,   # 140B€
-        "profit": 20800000000,      # 20.8B€
-        "employees": 105000,
-        "growth_rate": 0.06         # 6%
+        "valuation": 142000000000,   # 142B$ (market cap 2025)
+        "profit": 18300000000,      # 18.3B$ (profit 2024 réel)
+        "employees": 103000,        # 103k employés 2024
+        "growth_rate": 0.03         # 3% croissance modeste énergie
     },
     "startup": {
         "name": "Startup French Tech",
-        "valuation": 100000000,      # 100M€
-        "profit": 5000000,          # 5M€
+        "valuation": 100000000,      # 100M€ (exemple typique)
+        "profit": 5000000,          # 5M€ (marge 5% sur 100M revenus)
         "employees": 120,
-        "growth_rate": 0.30         # 30%
+        "growth_rate": 0.30         # 30% hypercroissance startup
+    },
+    "mistral": {
+        "name": "Mistral AI",
+        "valuation": 14000000000,    # 14B$ (valuation Sept 2025 réelle)
+        "profit": 36000000,         # 36M$ (60M$ revenue * 60% marge IA)
+        "employees": 316,           # 316 employés officiels 2025
+        "growth_rate": 1.00         # 100% hypercroissance IA
+    },
+    "ledger": {
+        "name": "Ledger",
+        "valuation": 1500000000,     # 1.5B$ (valuation 2024 réelle)
+        "profit": 21300000,         # 21.3M$ (70.9M$ revenue * 30% marge hardware)
+        "employees": 900,           # 900 employés officiels
+        "growth_rate": 0.20         # 20% croissance crypto/hardware
     }
 }
 
