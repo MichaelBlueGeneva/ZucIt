@@ -1,0 +1,42 @@
+🔥 La taxe Zucman fait débat sur LinkedIn ? Passons aux faits !
+
+Vu toutes les discussions passionnées sur ce sujet, j'ai créé ZucIt : un simulateur pour tester concrètement l'impact de cette taxe.
+
+Au lieu de débattre dans le vide, testons ensemble sur de vraies données ! 📊
+
+🎯 Simulez l'impact sur 20 ans pour :
+
+📊 LVMH, L'Oréal, TotalEnergies
+🚀 Mistral AI, Ledger (nouvelles licornes françaises)
+💡 Votre propre entreprise (paramètres personnalisables)
+
+🔍 Ce que l'app calcule :
+• Évolution des profits et valorisations
+• Impact sur l'emploi (modèle économique complet)
+• Recettes fiscales pour l'État
+• Risque de faillite et survie d'entreprise
+• Augmentation des prix consommateurs
+
+📈 Modèle économique avancé intégrant :
+• 4 canaux d'impact (investissement, demande, compétitivité, financement)
+• Elasticités emploi-productivité et demande-prix
+• Données financières réelles 2024-2025
+
+🛠️ Tech Stack : Flask + Chart.js + déploiement automatisé GitHub Actions
+
+👉 Testez maintenant : [URL de votre app Render]
+
+Parfait pour comprendre les enjeux économiques des politiques fiscales modernes !
+
+#Économie #Fiscalité #TaxeZucman #Innovation #DataViz #Flask #FrenchTech
+
+---
+
+💬 Plutôt que de continuer le débat théorique, testons ensemble !
+
+Partagez vos résultats en commentaires :
+• Quelle entreprise avez-vous testée ?
+• L'impact vous surprend-il ?
+• Cela change-t-il votre opinion sur cette taxe ?
+
+🤔 Team "Pour" ou "Contre" la taxe Zucman ? Les données parlent d'elles-mêmes...
